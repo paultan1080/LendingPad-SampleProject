@@ -360,6 +360,27 @@
 				},
 				{
 					"name": "Get Users By Tag",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var john = \"1422740e-6426-4c46-8445-3f5274a62424\"; // tags A, C, D",
+									"var mark = \"9422740e-6426-4c46-8445-3f5274a62424\"; // tags A, C, D since \"Update User - B\"",
+									"var andy = \"8722740e-6426-4c46-8445-3f5274a62424\"; // tag D",
+									"",
+									"pm.test(\"200 OK: exactly the users tagged C (any case)\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    var ids = pm.response.json().map(function (user) { return user.id; });",
+									"    pm.expect(ids).to.include(john);",
+									"    pm.expect(ids).to.include(mark);",
+									"    pm.expect(ids).to.not.include(andy);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],

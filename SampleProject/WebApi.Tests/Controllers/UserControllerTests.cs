@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using BusinessEntities;
+using Core.Services;
 using Core.Services.Users;
 using Moq;
 using WebApi.Controllers;
@@ -58,6 +60,23 @@ namespace WebApi.Tests.Controllers
             _updateUserService.Verify(s => s.Update(It.IsAny<User>(), It.IsAny<UserDetails>()), Times.Never);
         }
 
+        [Fact]
+        public void GetUsersByTag_DefaultPage_ReturnsMatchingUsersWithTheirTags()
+        {
+            var john = new User();
+            john.SetName("John Smith");
+            john.SetEmail("john@companya.com");
+            john.SetTags(new[] { "A", "C" });
+            _getUserService.Setup(s => s.GetUsersByTag("C", 0, Paging.DefaultPageSize)).Returns(new[] { john });
+
+            var response = CreateController().GetUsersByTag("C");
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var user = Assert.Single(ContentOf<IEnumerable<UserData>>(response));
+            Assert.Equal(john.Id, user.Id);
+            Assert.Equal(new[] { "A", "C" }, user.Tags);
+        }
+
         private UserController CreateController()
         {
             var request = new HttpRequestMessage();
@@ -66,6 +85,11 @@ namespace WebApi.Tests.Controllers
                    {
                        Request = request
                    };
+        }
+
+        private static T ContentOf<T>(HttpResponseMessage response)
+        {
+            return (T)((ObjectContent)response.Content).Value;
         }
     }
 }

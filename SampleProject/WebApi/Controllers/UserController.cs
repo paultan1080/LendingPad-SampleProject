@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 using BusinessEntities;
+using Core.Services;
 using Core.Services.Users;
 using WebApi.Models.Users;
 
@@ -91,9 +92,12 @@ namespace WebApi.Controllers
 
         [Route("list/tag")]
         [HttpGet]
-        public HttpResponseMessage GetUsersByTag(string tag)
+        public HttpResponseMessage GetUsersByTag(string tag = null, int skip = 0, int take = Paging.DefaultPageSize)
         {
-            throw new NotImplementedException();
+            var users = _getUserService.GetUsersByTag(tag, skip, take)
+                                       .Select(q => new UserData(q))
+                                       .ToList();
+            return Found(users);
         }
     }
 }

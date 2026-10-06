@@ -9,5 +9,7 @@ namespace Core.Services.Users
         User GetUser(Guid id);
 
         IEnumerable<User> GetUsers(UserTypes? userType = null, string name = null, string email = null);
+
+        IEnumerable<User> GetUsersByTag(string tag, int skip, int take);
     }
 }
