@@ -270,6 +270,20 @@
 				},
 				{
 					"name": "Update User - B",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 OK: a user may have no salary\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(pm.response.json().monthlySalary).to.be.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],

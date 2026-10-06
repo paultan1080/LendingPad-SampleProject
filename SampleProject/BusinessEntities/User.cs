@@ -84,6 +84,10 @@ namespace BusinessEntities
 
         public void SetMonthlySalary(decimal? monthlySalary)
         {
+            if (monthlySalary < 0)
+            {
+                throw new DomainValidationException(nameof(monthlySalary), "Salary cannot be negative.");
+            }
             _monthlySalary = monthlySalary;
         }
 

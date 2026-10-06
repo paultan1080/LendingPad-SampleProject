@@ -31,6 +31,25 @@ namespace UnitTests.Entities
         }
 
         [Fact]
+        public void SetMonthlySalary_Negative_ThrowsValidationError()
+        {
+            var exception = Assert.Throws<DomainValidationException>(() => new User().SetMonthlySalary(-1m));
+
+            Assert.Equal("monthlySalary", exception.MemberName);
+        }
+
+        [Fact]
+        public void SetMonthlySalary_Null_IsAllowed()
+        {
+            var user = new User();
+            user.SetMonthlySalary(5000m);
+
+            user.SetMonthlySalary(null);
+
+            Assert.Null(user.MonthlySalary);
+        }
+
+        [Fact]
         public void SetEmail_Valid_KeepsName()
         {
             var user = new User();

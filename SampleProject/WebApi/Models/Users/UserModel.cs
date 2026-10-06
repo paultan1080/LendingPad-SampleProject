@@ -21,7 +21,9 @@ namespace WebApi.Models.Users
         [EnumDataType(typeof(UserTypes))]
         public UserTypes? Type { get; set; }
 
+        [Range(0, double.MaxValue, ErrorMessage = "The AnnualSalary field cannot be negative.")]
         public decimal? AnnualSalary { get; set; }
+
         public IEnumerable<string> Tags { get; set; }
     }
 }
