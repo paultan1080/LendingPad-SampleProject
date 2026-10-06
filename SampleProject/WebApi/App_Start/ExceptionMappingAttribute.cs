@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Web.Http.Filters;
+using System.Web.Http.ModelBinding;
 using Common.Exceptions;
 
 namespace WebApi.App_Start
@@ -18,6 +19,12 @@ namespace WebApi.App_Start
             {
                 case ConflictException conflict:
                     actionExecutedContext.Response = request.CreateErrorResponse(HttpStatusCode.Conflict, conflict.Message);
+                    break;
+                case DomainValidationException invalid:
+                    // Same shape as request validation errors (ValidateModelAttribute), so clients handle one 400 format.
+                    var errors = new ModelStateDictionary();
+                    errors.AddModelError(invalid.MemberName, invalid.Message);
+                    actionExecutedContext.Response = request.CreateErrorResponse(HttpStatusCode.BadRequest, errors);
                     break;
             }
         }

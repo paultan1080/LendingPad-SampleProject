@@ -26,9 +26,23 @@ namespace WebApi.Tests.Filters
         }
 
         [Fact]
-        public void OnException_UnexpectedException_LeavesItUnhandled()
+        public void OnException_DomainValidation_Returns400WithModelStateForTheMember()
         {
-            var context = ContextFor(new InvalidOperationException("bug"));
+            var context = ContextFor(new DomainValidationException("age", "Age must be between 0 and 150."));
+
+            _filter.OnException(context);
+
+            Assert.Equal(HttpStatusCode.BadRequest, context.Response.StatusCode);
+            var modelState = ErrorOf(context.Response).ModelState;
+            Assert.Equal(new[] { "Age must be between 0 and 150." }, (string[])modelState["age"]);
+        }
+
+        [Theory]
+        [InlineData(typeof(InvalidOperationException))]
+        [InlineData(typeof(ArgumentException))]
+        public void OnException_UnexpectedException_LeavesItUnhandled(Type exceptionType)
+        {
+            var context = ContextFor((Exception)Activator.CreateInstance(exceptionType, "bug"));
 
             _filter.OnException(context);
 

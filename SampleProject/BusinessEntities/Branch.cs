@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Exceptions;
 using Common.Extensions;
 
 namespace BusinessEntities
@@ -18,9 +18,9 @@ namespace BusinessEntities
 
         public void SetName(string name)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentNullException("Name was not provided.");
+                throw new DomainValidationException(nameof(name), "Name is required.");
             }
             _name = name;
         }

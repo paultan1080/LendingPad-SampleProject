@@ -36,6 +36,15 @@ namespace UnitTests.Services
         }
 
         [Fact]
+        public void Create_EmptyId_ThrowsValidationErrorForId()
+        {
+            var exception = Assert.Throws<DomainValidationException>(() => CreateService().Create(Guid.Empty, "Mary", "mary@companya.com", UserTypes.Admin, 80000m, Tags));
+
+            Assert.Equal("id", exception.MemberName);
+            _userRepository.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
+        }
+
+        [Fact]
         public void Create_NewId_PopulatesAndStoresTheUser()
         {
             var user = new User();

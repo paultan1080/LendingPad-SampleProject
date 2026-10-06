@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Common.Exceptions;
 using Common.Extensions;
 
 namespace BusinessEntities
@@ -51,24 +52,28 @@ namespace BusinessEntities
 
         public void SetName(string name)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentNullException("Name was not provided.");
+                throw new DomainValidationException(nameof(name), "Name is required.");
             }
             _name = name;
         }
 
         public void SetEmail(string email)
         {
-            if (string.IsNullOrEmpty(email))
+            if (string.IsNullOrWhiteSpace(email))
             {
-                throw new ArgumentNullException("Name was not provided.");
+                throw new DomainValidationException(nameof(email), "Email is required.");
             }
             _email = email;
         }
 
         public void SetType(UserTypes type)
         {
+            if (!Enum.IsDefined(typeof(UserTypes), type))
+            {
+                throw new DomainValidationException(nameof(type), $"'{type}' is not a valid user type.");
+            }
             _type = type;
         }
 

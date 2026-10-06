@@ -24,6 +24,11 @@ namespace Core.Services.Users
 
         public User Create(Guid id, string name, string email, UserTypes type, decimal? annualSalary, IEnumerable<string> tags)
         {
+            if (id == Guid.Empty)
+            {
+                throw new DomainValidationException(nameof(id), "A non-empty user id is required.");
+            }
+
             // Fails fast; a concurrent create racing past this check is still
             // rejected by optimistic concurrency when the UOW commits.
             if (_userRepository.Get(id) != null)

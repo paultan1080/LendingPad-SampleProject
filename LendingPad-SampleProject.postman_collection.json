@@ -226,6 +226,20 @@
 				},
 				{
 					"name": "Update User - A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"400 Bad Request: email is required\", function () {",
+									"    pm.response.to.have.status(400);",
+									"    pm.expect(pm.response.json().modelState).to.have.property(\"model.Email\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
