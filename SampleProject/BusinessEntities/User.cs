@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Common.Exceptions;
 using Common.Extensions;
 
@@ -7,6 +8,8 @@ namespace BusinessEntities
 {
     public class User : IdObject
     {
+        public const int MaxAge = 150;
+
         private readonly List<string> _tags = new List<string>();
         private int _age;
         private string _email;
@@ -79,7 +82,11 @@ namespace BusinessEntities
 
         public void SetAge(int age)
         {
-            _email = _name;
+            if (age < 0 || age > MaxAge)
+            {
+                throw new DomainValidationException(nameof(age), $"Age must be between 0 and {MaxAge}.");
+            }
+            _age = age;
         }
 
         public void SetMonthlySalary(decimal? monthlySalary)
@@ -91,9 +98,23 @@ namespace BusinessEntities
             _monthlySalary = monthlySalary;
         }
 
+        /// <summary>
+        /// Replaces all tags; pass an empty collection to remove them. Blank entries are dropped,
+        /// values are trimmed and duplicates removed ignoring case, since tags match case-insensitively.
+        /// </summary>
         public void SetTags(IEnumerable<string> tags)
         {
-            _tags.Initialize(tags);
+            if (tags == null)
+            {
+                throw new DomainValidationException(nameof(tags), "Tags are required; use an empty list to remove all tags.");
+            }
+
+            // Materialise before clearing, so passing the current tags (or a query over them) is safe.
+            var normalized = tags.Where(tag => !string.IsNullOrWhiteSpace(tag))
+                                 .Select(tag => tag.Trim())
+                                 .Distinct(StringComparer.OrdinalIgnoreCase)
+                                 .ToList();
+            _tags.Initialize(normalized);
         }
     }
 }

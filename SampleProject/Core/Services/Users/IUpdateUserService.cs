@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using BusinessEntities;
+﻿using BusinessEntities;
 
 namespace Core.Services.Users
 {
     public interface IUpdateUserService
     {
-        void Update(User user, string name, string email, UserTypes type, decimal? annualSalary, IEnumerable<string> tags);
+        void Update(User user, UserDetails details);
     }
 }

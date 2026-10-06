@@ -53,6 +53,8 @@
 									"    pm.response.to.have.status(200);",
 									"    var user = pm.response.json();",
 									"    pm.expect(user.id).to.eql(\"1422740e-6426-4c46-8445-3f5274a62424\");",
+									"    pm.expect(user.age).to.eql(27);",
+									"    pm.expect(user.tags).to.eql([\"A\", \"C\", \"D\"]);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -314,6 +316,20 @@
 				},
 				{
 					"name": "Update User - C",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"400 Bad Request: tags are required; [] removes them, null is rejected\", function () {",
+									"    pm.response.to.have.status(400);",
+									"    pm.expect(pm.response.json().modelState).to.have.property(\"model.Tags\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],

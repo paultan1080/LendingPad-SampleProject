@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using BusinessEntities;
 using Common;
 
@@ -9,14 +9,24 @@ namespace Core.Services.Users
     {
         private const int MonthsPerYear = 12;
 
-        public void Update(User user, string name, string email, UserTypes type, decimal? annualSalary, IEnumerable<string> tags)
+        public void Update(User user, UserDetails details)
         {
-            user.SetEmail(email);
-            user.SetName(name);
-            user.SetType(type);
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+            if (details == null)
+            {
+                throw new ArgumentNullException(nameof(details));
+            }
+
+            user.SetEmail(details.Email);
+            user.SetName(details.Name);
+            user.SetType(details.Type);
+            user.SetAge(details.Age);
             // Lifted arithmetic: no annual salary means no monthly salary.
-            user.SetMonthlySalary(annualSalary / MonthsPerYear);
-            user.SetTags(tags);
+            user.SetMonthlySalary(details.AnnualSalary / MonthsPerYear);
+            user.SetTags(details.Tags);
         }
     }
 }

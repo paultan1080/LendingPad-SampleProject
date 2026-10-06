@@ -12,7 +12,16 @@ namespace UnitTests.Services
     public class CreateUserServiceTests
     {
         private static readonly Guid Id = Guid.NewGuid();
-        private static readonly string[] Tags = { "A" };
+
+        private readonly UserDetails _details = new UserDetails
+                                                {
+                                                    Name = "Mary",
+                                                    Email = "mary@companya.com",
+                                                    Type = UserTypes.Admin,
+                                                    Age = 29,
+                                                    AnnualSalary = 80000m,
+                                                    Tags = new string[0]
+                                                };
 
         private readonly Mock<IIdObjectFactory<User>> _userFactory = new Mock<IIdObjectFactory<User>>();
         private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
@@ -28,7 +37,7 @@ namespace UnitTests.Services
         {
             _userRepository.Setup(r => r.Get(Id)).Returns(new User());
 
-            var exception = Assert.Throws<ConflictException>(() => CreateService().Create(Id, "Mary", "mary@companya.com", UserTypes.Admin, 80000m, Tags));
+            var exception = Assert.Throws<ConflictException>(() => CreateService().Create(Id, _details));
 
             Assert.Contains(Id.ToString(), exception.Message);
             _userFactory.Verify(f => f.Create(It.IsAny<Guid>()), Times.Never);
@@ -38,7 +47,7 @@ namespace UnitTests.Services
         [Fact]
         public void Create_EmptyId_ThrowsValidationErrorForId()
         {
-            var exception = Assert.Throws<DomainValidationException>(() => CreateService().Create(Guid.Empty, "Mary", "mary@companya.com", UserTypes.Admin, 80000m, Tags));
+            var exception = Assert.Throws<DomainValidationException>(() => CreateService().Create(Guid.Empty, _details));
 
             Assert.Equal("id", exception.MemberName);
             _userRepository.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
@@ -50,10 +59,10 @@ namespace UnitTests.Services
             var user = new User();
             _userFactory.Setup(f => f.Create(Id)).Returns(user);
 
-            var result = CreateService().Create(Id, "Mary", "mary@companya.com", UserTypes.Admin, 80000m, Tags);
+            var result = CreateService().Create(Id, _details);
 
             Assert.Same(user, result);
-            _updateUserService.Verify(u => u.Update(user, "Mary", "mary@companya.com", UserTypes.Admin, 80000m, Tags), Times.Once);
+            _updateUserService.Verify(u => u.Update(user, _details), Times.Once);
             _userRepository.Verify(r => r.Save(user), Times.Once);
         }
     }

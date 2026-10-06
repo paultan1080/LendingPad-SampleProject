@@ -50,6 +50,73 @@ namespace UnitTests.Entities
         }
 
         [Fact]
+        public void SetTags_Null_ThrowsValidationErrorAndKeepsTags()
+        {
+            var user = new User();
+            user.SetTags(new[] { "A", "C" });
+
+            var exception = Assert.Throws<DomainValidationException>(() => user.SetTags(null));
+
+            Assert.Equal("tags", exception.MemberName);
+            Assert.Equal(new[] { "A", "C" }, user.Tags);
+        }
+
+        [Fact]
+        public void SetTags_Empty_RemovesAllTags()
+        {
+            var user = new User();
+            user.SetTags(new[] { "A", "C" });
+
+            user.SetTags(new string[0]);
+
+            Assert.Empty(user.Tags);
+        }
+
+        [Fact]
+        public void SetTags_ItsOwnTags_KeepsThem()
+        {
+            var user = new User();
+            user.SetTags(new[] { "A", "C" });
+
+            user.SetTags(user.Tags);
+
+            Assert.Equal(new[] { "A", "C" }, user.Tags);
+        }
+
+        [Fact]
+        public void SetTags_DropsBlanksTrimsAndRemovesCaseInsensitiveDuplicates()
+        {
+            var user = new User();
+
+            user.SetTags(new[] { " a ", "A", "", null, "  ", "b" });
+
+            Assert.Equal(new[] { "a", "b" }, user.Tags);
+        }
+
+        [Fact]
+        public void SetAge_SetsAgeAndLeavesEmailAlone()
+        {
+            var user = new User();
+            user.SetName("John Smith");
+            user.SetEmail("john@companya.com");
+
+            user.SetAge(27);
+
+            Assert.Equal(27, user.Age);
+            Assert.Equal("john@companya.com", user.Email);
+        }
+
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(User.MaxAge + 1)]
+        public void SetAge_OutOfRange_ThrowsValidationErrorForAge(int age)
+        {
+            var exception = Assert.Throws<DomainValidationException>(() => new User().SetAge(age));
+
+            Assert.Equal("age", exception.MemberName);
+        }
+
+        [Fact]
         public void SetEmail_Valid_KeepsName()
         {
             var user = new User();
