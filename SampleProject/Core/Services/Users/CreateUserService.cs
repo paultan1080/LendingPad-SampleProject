@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BusinessEntities;
 using Common;
+using Common.Exceptions;
 using Core.Factories;
 using Data.Repositories;
 
@@ -23,6 +24,13 @@ namespace Core.Services.Users
 
         public User Create(Guid id, string name, string email, UserTypes type, decimal? annualSalary, IEnumerable<string> tags)
         {
+            // Fails fast; a concurrent create racing past this check is still
+            // rejected by optimistic concurrency when the UOW commits.
+            if (_userRepository.Get(id) != null)
+            {
+                throw new ConflictException($"A user with id '{id}' already exists.");
+            }
+
             var user = _userFactory.Create(id);
             _updateUserService.Update(user, name, email, type, annualSalary, tags);
             _userRepository.Save(user);

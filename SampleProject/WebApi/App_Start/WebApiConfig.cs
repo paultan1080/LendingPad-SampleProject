@@ -52,7 +52,8 @@ namespace WebApi
 
             config.Filters.AddRange(new IFilter[]
                                     {
-                                        new ContextInitializeAttribute()
+                                        new ContextInitializeAttribute(),
+                                        new ExceptionMappingAttribute()
                                     });
         }
     }
