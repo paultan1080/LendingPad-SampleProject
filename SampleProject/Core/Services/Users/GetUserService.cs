@@ -33,14 +33,7 @@ namespace Core.Services.Users
             {
                 throw new DomainValidationException(nameof(tag), "A tag is required.");
             }
-            if (skip < 0)
-            {
-                throw new DomainValidationException(nameof(skip), "Skip cannot be negative.");
-            }
-            if (take < 1 || take > Paging.MaxPageSize)
-            {
-                throw new DomainValidationException(nameof(take), $"Take must be between 1 and {Paging.MaxPageSize}.");
-            }
+            Paging.EnsureValid(skip, take);
 
             return _userRepository.GetByTag(tag.Trim(), skip, take);
         }

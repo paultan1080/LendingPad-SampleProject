@@ -39,7 +39,7 @@ namespace UnitTests.Services
 
             var exception = Assert.Throws<ConflictException>(() => CreateService().Create(Id, _details));
 
-            Assert.Contains(Id.ToString(), exception.Message);
+            Assert.Equal($"A user with id '{Id}' already exists.", exception.Message);
             _userFactory.Verify(f => f.Create(It.IsAny<Guid>()), Times.Never);
             _userRepository.Verify(r => r.Save(It.IsAny<User>()), Times.Never);
         }

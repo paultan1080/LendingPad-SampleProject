@@ -28,12 +28,10 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:49834/users/clear",
-							"protocol": "http",
+							"raw": "{{baseUrl}}/users/clear",
 							"host": [
-								"localhost"
+								"{{baseUrl}}"
 							],
-							"port": "49834",
 							"path": [
 								"users",
 								"clear"
@@ -74,12 +72,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:49834/users/1422740e-6426-4c46-8445-3f5274a62424/create",
-							"protocol": "http",
+							"raw": "{{baseUrl}}/users/1422740e-6426-4c46-8445-3f5274a62424/create",
 							"host": [
-								"localhost"
+								"{{baseUrl}}"
 							],
-							"port": "49834",
 							"path": [
 								"users",
 								"1422740e-6426-4c46-8445-3f5274a62424",
@@ -118,12 +114,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:49834/users/9422740e-6426-4c46-8445-3f5274a62424/create",
-							"protocol": "http",
+							"raw": "{{baseUrl}}/users/9422740e-6426-4c46-8445-3f5274a62424/create",
 							"host": [
-								"localhost"
+								"{{baseUrl}}"
 							],
-							"port": "49834",
 							"path": [
 								"users",
 								"9422740e-6426-4c46-8445-3f5274a62424",
@@ -162,12 +156,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:49834/users/8722740e-6426-4c46-8445-3f5274a62424/create",
-							"protocol": "http",
+							"raw": "{{baseUrl}}/users/8722740e-6426-4c46-8445-3f5274a62424/create",
 							"host": [
-								"localhost"
+								"{{baseUrl}}"
 							],
-							"port": "49834",
 							"path": [
 								"users",
 								"8722740e-6426-4c46-8445-3f5274a62424",
@@ -211,12 +203,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:49834/users/1422740e-6426-4c46-8445-3f5274a62424/create",
-							"protocol": "http",
+							"raw": "{{baseUrl}}/users/1422740e-6426-4c46-8445-3f5274a62424/create",
 							"host": [
-								"localhost"
+								"{{baseUrl}}"
 							],
-							"port": "49834",
 							"path": [
 								"users",
 								"1422740e-6426-4c46-8445-3f5274a62424",
@@ -255,12 +245,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:49834/users/9422740e-6426-4c46-8445-3f5274a62424/update",
-							"protocol": "http",
+							"raw": "{{baseUrl}}/users/9422740e-6426-4c46-8445-3f5274a62424/update",
 							"host": [
-								"localhost"
+								"{{baseUrl}}"
 							],
-							"port": "49834",
 							"path": [
 								"users",
 								"9422740e-6426-4c46-8445-3f5274a62424",
@@ -299,12 +287,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:49834/users/9422740e-6426-4c46-8445-3f5274a62424/update",
-							"protocol": "http",
+							"raw": "{{baseUrl}}/users/9422740e-6426-4c46-8445-3f5274a62424/update",
 							"host": [
-								"localhost"
+								"{{baseUrl}}"
 							],
-							"port": "49834",
 							"path": [
 								"users",
 								"9422740e-6426-4c46-8445-3f5274a62424",
@@ -343,12 +329,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:49834/users/9422740e-6426-4c46-8445-3f5274a62424/update",
-							"protocol": "http",
+							"raw": "{{baseUrl}}/users/9422740e-6426-4c46-8445-3f5274a62424/update",
 							"host": [
-								"localhost"
+								"{{baseUrl}}"
 							],
-							"port": "49834",
 							"path": [
 								"users",
 								"9422740e-6426-4c46-8445-3f5274a62424",
@@ -385,12 +369,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:49834/users/list/tag?tag=C",
-							"protocol": "http",
+							"raw": "{{baseUrl}}/users/list/tag?tag=C",
 							"host": [
-								"localhost"
+								"{{baseUrl}}"
 							],
-							"port": "49834",
 							"path": [
 								"users",
 								"list",
@@ -413,13 +395,1092 @@
 			"item": [
 				{
 					"name": "Products",
-					"item": []
+					"item": [
+						{
+							"name": "Create Product - Laptop",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"laptopId\", pm.variables.replaceIn(\"{{$guid}}\"));"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200 OK: product created as sent\", function () {",
+											"    pm.response.to.have.status(200);",
+											"    var product = pm.response.json();",
+											"    pm.expect(product.id).to.eql(pm.collectionVariables.get(\"laptopId\"));",
+											"    pm.expect(product.price).to.eql(1499.99);",
+											"    pm.expect(product.category.key).to.eql(\"Hardware\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Laptop\",\r\n    \"description\": \"15-inch, 16 GB RAM\",\r\n    \"price\": 1499.99,\r\n    \"category\": \"Hardware\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/products/{{laptopId}}/create",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"products",
+										"{{laptopId}}",
+										"create"
+									]
+								},
+								"description": "Ids are chosen by the client, as for users. Category accepts the name or the number (Hardware = 1, Software = 2, Service = 3)."
+							},
+							"response": []
+						},
+						{
+							"name": "Create Product - Mouse",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"mouseId\", pm.variables.replaceIn(\"{{$guid}}\"));"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200 OK: description is optional\", function () {",
+											"    pm.response.to.have.status(200);",
+											"    pm.expect(pm.response.json().description).to.be.null;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Mouse\",\r\n    \"price\": 25.5,\r\n    \"category\": \"Hardware\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/products/{{mouseId}}/create",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"products",
+										"{{mouseId}}",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Product - Support Plan",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"supportPlanId\", pm.variables.replaceIn(\"{{$guid}}\"));"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200 OK\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Support Plan\",\r\n    \"description\": \"Next business day\",\r\n    \"price\": 199,\r\n    \"category\": \"Service\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/products/{{supportPlanId}}/create",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"products",
+										"{{supportPlanId}}",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Product - invalid (400)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"400 Bad Request: every invalid field is reported\", function () {",
+											"    pm.response.to.have.status(400);",
+											"    var errors = pm.response.json().modelState;",
+											"    pm.expect(errors).to.have.property(\"model.Name\");",
+											"    pm.expect(errors).to.have.property(\"model.Price\");",
+											"    pm.expect(errors).to.have.property(\"model.category\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"\",\r\n    \"price\": -1,\r\n    \"category\": \"Weapons\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/products/{{$guid}}/create",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"products",
+										"{{$guid}}",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Product",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200 OK: the laptop\", function () {",
+											"    pm.response.to.have.status(200);",
+											"    pm.expect(pm.response.json().name).to.eql(\"Laptop\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/products/{{laptopId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"products",
+										"{{laptopId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Product - Laptop price",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200 OK: new price\", function () {",
+											"    pm.response.to.have.status(200);",
+											"    pm.expect(pm.response.json().price).to.eql(1399);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Laptop\",\r\n    \"description\": \"15-inch, 16 GB RAM\",\r\n    \"price\": 1399,\r\n    \"category\": \"Hardware\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/products/{{laptopId}}/update",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"products",
+										"{{laptopId}}",
+										"update"
+									]
+								},
+								"description": "Full replacement, like the user update."
+							},
+							"response": []
+						},
+						{
+							"name": "Get Products - Hardware from 1 to 1000",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200 OK: only hardware priced 1 to 1000, including the mouse but not the laptop\", function () {",
+											"    pm.response.to.have.status(200);",
+											"    var products = pm.response.json();",
+											"    var ids = products.map(function (p) { return p.id; });",
+											"    pm.expect(ids).to.include(pm.collectionVariables.get(\"mouseId\"));",
+											"    pm.expect(ids).to.not.include(pm.collectionVariables.get(\"laptopId\"));",
+											"    products.forEach(function (p) {",
+											"        pm.expect(p.category.key).to.eql(\"Hardware\");",
+											"        pm.expect(p.price).to.be.within(1, 1000);",
+											"    });",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/products/list?category=Hardware&minPrice=1&maxPrice=1000&take=1024",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"products",
+										"list"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "Hardware"
+										},
+										{
+											"key": "minPrice",
+											"value": "1"
+										},
+										{
+											"key": "maxPrice",
+											"value": "1000"
+										},
+										{
+											"key": "take",
+											"value": "1024"
+										}
+									]
+								},
+								"description": "Filters: name (fragment, any case), category, minPrice and maxPrice (inclusive), skip and take (default 50, max 1024). Ordered by name."
+							},
+							"response": []
+						},
+						{
+							"name": "Get Products - name contains 'lap'",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200 OK: name matches ignore case\", function () {",
+											"    pm.response.to.have.status(200);",
+											"    var products = pm.response.json();",
+											"    pm.expect(products.map(function (p) { return p.id; })).to.include(pm.collectionVariables.get(\"laptopId\"));",
+											"    products.forEach(function (p) { pm.expect(p.name.toLowerCase()).to.include(\"lap\"); });",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/products/list?name=lap&take=1024",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"products",
+										"list"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "lap"
+										},
+										{
+											"key": "take",
+											"value": "1024"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Product - Support Plan",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200 OK\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/products/{{supportPlanId}}/delete",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"products",
+										"{{supportPlanId}}",
+										"delete"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Product - deleted (404)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"404 Not Found\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/products/{{supportPlanId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"products",
+										"{{supportPlanId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "Run before Orders: creates the products the orders use ({{laptopId}}, {{mouseId}}). Every run uses new ids, so the folder can be rerun against a live server."
 				},
 				{
 					"name": "Orders",
-					"item": []
+					"item": [
+						{
+							"name": "Create Customer",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"customerId\", pm.variables.replaceIn(\"{{$guid}}\"));"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200 OK\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Clara Customer\",\r\n    \"email\": \"clara@customer.com\",\r\n    \"type\": \"Customer\",\r\n    \"age\": 41,\r\n    \"annualSalary\": null,\r\n    \"tags\": []\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/{{customerId}}/create",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"{{customerId}}",
+										"create"
+									]
+								},
+								"description": "Only users of type Customer can place orders."
+							},
+							"response": []
+						},
+						{
+							"name": "Create Order",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"orderId\", pm.variables.replaceIn(\"{{$guid}}\"));"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200 OK: placed, priced at the products' current prices\", function () {",
+											"    pm.response.to.have.status(200);",
+											"    var order = pm.response.json();",
+											"    pm.expect(order.status.key).to.eql(\"Placed\");",
+											"    pm.expect(order.customerId).to.eql(pm.collectionVariables.get(\"customerId\"));",
+											"    pm.expect(order.lines).to.have.lengthOf(2);",
+											"    pm.expect(order.total).to.eql(1399 + 2 * 25.5);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"customerId\": \"{{customerId}}\",\r\n    \"lines\": [\r\n        {\r\n            \"productId\": \"{{laptopId}}\",\r\n            \"quantity\": 1\r\n        },\r\n        {\r\n            \"productId\": \"{{mouseId}}\",\r\n            \"quantity\": 2\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/orders/{{orderId}}/create",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"orders",
+										"{{orderId}}",
+										"create"
+									]
+								},
+								"description": "Each line snapshots the product's name and unit price, so later price changes or deleting the product never alter the order."
+							},
+							"response": []
+						},
+						{
+							"name": "Create Employee",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"employeeId\", pm.variables.replaceIn(\"{{$guid}}\"));"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200 OK\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Eve Employee\",\r\n    \"email\": \"eve@companya.com\",\r\n    \"type\": \"Employee\",\r\n    \"age\": 30,\r\n    \"annualSalary\": 60000,\r\n    \"tags\": []\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/{{employeeId}}/create",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"{{employeeId}}",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Order - employee as customer (400)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"400 Bad Request: only customers can order\", function () {",
+											"    pm.response.to.have.status(400);",
+											"    var errors = pm.response.json().modelState.customerId;",
+											"    pm.expect(errors[0]).to.include(\"Only customers can place orders\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"customerId\": \"{{employeeId}}\",\r\n    \"lines\": [\r\n        {\r\n            \"productId\": \"{{mouseId}}\",\r\n            \"quantity\": 1\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/orders/{{$guid}}/create",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"orders",
+										"{{$guid}}",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Order",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200 OK: lines and total\", function () {",
+											"    pm.response.to.have.status(200);",
+											"    var order = pm.response.json();",
+											"    var sum = order.lines.reduce(function (s, l) { return s + l.total; }, 0);",
+											"    pm.expect(order.total).to.eql(sum);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/orders/{{orderId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"orders",
+										"{{orderId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Order - change quantities",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200 OK: lines can change while the order is Placed\", function () {",
+											"    pm.response.to.have.status(200);",
+											"    pm.expect(pm.response.json().total).to.eql(1399 + 3 * 25.5);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"status\": \"Placed\",\r\n    \"lines\": [\r\n        {\r\n            \"productId\": \"{{laptopId}}\",\r\n            \"quantity\": 1\r\n        },\r\n        {\r\n            \"productId\": \"{{mouseId}}\",\r\n            \"quantity\": 3\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/orders/{{orderId}}/update",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"orders",
+										"{{orderId}}",
+										"update"
+									]
+								},
+								"description": "An update sends the status and the full list of lines. Lines may change only while the order is Placed."
+							},
+							"response": []
+						},
+						{
+							"name": "Update Order - pay",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200 OK: Placed -> Paid\", function () {",
+											"    pm.response.to.have.status(200);",
+											"    pm.expect(pm.response.json().status.key).to.eql(\"Paid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"status\": \"Paid\",\r\n    \"lines\": [\r\n        {\r\n            \"productId\": \"{{laptopId}}\",\r\n            \"quantity\": 1\r\n        },\r\n        {\r\n            \"productId\": \"{{mouseId}}\",\r\n            \"quantity\": 3\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/orders/{{orderId}}/update",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"orders",
+										"{{orderId}}",
+										"update"
+									]
+								},
+								"description": "Lifecycle: Placed -> Paid -> Shipped -> Delivered; Cancelled is possible until the order ships. Resending the current lines is not a change."
+							},
+							"response": []
+						},
+						{
+							"name": "Update Order - change lines after payment (409)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"409 Conflict: a paid order's lines are fixed\", function () {",
+											"    pm.response.to.have.status(409);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"status\": \"Paid\",\r\n    \"lines\": [\r\n        {\r\n            \"productId\": \"{{mouseId}}\",\r\n            \"quantity\": 1\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/orders/{{orderId}}/update",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"orders",
+										"{{orderId}}",
+										"update"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Orders - customer's paid orders",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200 OK: the paid order, and only matching orders\", function () {",
+											"    pm.response.to.have.status(200);",
+											"    var orders = pm.response.json();",
+											"    pm.expect(orders.map(function (o) { return o.id; })).to.include(pm.collectionVariables.get(\"orderId\"));",
+											"    orders.forEach(function (o) {",
+											"        pm.expect(o.status.key).to.eql(\"Paid\");",
+											"        pm.expect(o.customerId).to.eql(pm.collectionVariables.get(\"customerId\"));",
+											"    });",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/orders/list?customerId={{customerId}}&status=Paid",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"orders",
+										"list"
+									],
+									"query": [
+										{
+											"key": "customerId",
+											"value": "{{customerId}}"
+										},
+										{
+											"key": "status",
+											"value": "Paid"
+										}
+									]
+								},
+								"description": "Filters: customerId, status, productId (orders containing it), placedFrom (inclusive) and placedBefore (exclusive; times without a zone are UTC), skip and take. Newest first."
+							},
+							"response": []
+						},
+						{
+							"name": "Get Orders - containing the laptop, placed since 2000",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200 OK: the order, and only orders with a laptop line\", function () {",
+											"    pm.response.to.have.status(200);",
+											"    var orders = pm.response.json();",
+											"    pm.expect(orders.map(function (o) { return o.id; })).to.include(pm.collectionVariables.get(\"orderId\"));",
+											"    orders.forEach(function (o) {",
+											"        pm.expect(o.lines.map(function (l) { return l.productId; })).to.include(pm.collectionVariables.get(\"laptopId\"));",
+											"        pm.expect(Date.parse(o.placedOn)).to.be.at.least(Date.parse(\"2000-01-01T00:00:00Z\"));",
+											"    });",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/orders/list?productId={{laptopId}}&placedFrom=2000-01-01T00:00:00Z&take=1024",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"orders",
+										"list"
+									],
+									"query": [
+										{
+											"key": "productId",
+											"value": "{{laptopId}}"
+										},
+										{
+											"key": "placedFrom",
+											"value": "2000-01-01T00:00:00Z"
+										},
+										{
+											"key": "take",
+											"value": "1024"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Order - paid (409)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"409 Conflict: only placed or cancelled orders can be deleted\", function () {",
+											"    pm.response.to.have.status(409);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/orders/{{orderId}}/delete",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"orders",
+										"{{orderId}}",
+										"delete"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Order - cancel",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200 OK: Paid -> Cancelled\", function () {",
+											"    pm.response.to.have.status(200);",
+											"    pm.expect(pm.response.json().status.key).to.eql(\"Cancelled\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"status\": \"Cancelled\",\r\n    \"lines\": [\r\n        {\r\n            \"productId\": \"{{laptopId}}\",\r\n            \"quantity\": 1\r\n        },\r\n        {\r\n            \"productId\": \"{{mouseId}}\",\r\n            \"quantity\": 3\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/orders/{{orderId}}/update",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"orders",
+										"{{orderId}}",
+										"update"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Order",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"200 OK\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/orders/{{orderId}}/delete",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"orders",
+										"{{orderId}}",
+										"delete"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Order - deleted (404)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"404 Not Found\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/orders/{{orderId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"orders",
+										"{{orderId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "Run after Products (uses {{laptopId}} and {{mouseId}}). Walks an order through its lifecycle and shows the rules that guard it."
 				}
 			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:49834",
+			"type": "string"
+		},
+		{
+			"key": "laptopId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "mouseId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "supportPlanId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "customerId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "employeeId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "orderId",
+			"value": "",
+			"type": "string"
 		}
 	]
 }
